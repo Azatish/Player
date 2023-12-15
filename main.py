@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('please_be_final.ui', self)
+        uic.loadUi('dist\please_be_final.ui', self)
 
         self.init_UI()
 
@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
         self.Volume_dial.valueChanged.connect(self.set_volume)
 
         # db + cursor
-        self.con = sqlite3.connect("playlist.db")
+        self.con = sqlite3.connect("dist/playlist.db")
         self.cur = self.con.cursor()
 
         #
@@ -268,7 +268,7 @@ class MainWindow(QMainWindow):
 
     def on_item_clicked(self, item):
         # загрузка файла в player
-        con = sqlite3.connect("playlist.db")
+        con = sqlite3.connect("dist/playlist.db")
         cur = con.cursor()
         meow = cur.execute("""SELECT track_link FROM tracks WHERE title = ?""", (item.text(), )).fetchall()
         self.load_mp3(list(meow[0])[0] if type(meow) == list else meow)
@@ -370,7 +370,7 @@ class MainWindow(QMainWindow):
                 item.setText(column, new_name)  # Обновляем название плейлиста в QTreeWidget
 
                 # Сохраняем изменения в базе данных
-                self.con1 = sqlite3.connect('playlist.db')
+                self.con1 = sqlite3.connect('dist/playlist.db')
                 cursor = self.con1.cursor()
                 cursor.execute("UPDATE playlist_s SET name = ? WHERE id = (SELECT id FROM playlist_s WHERE name = ?)", (new_name, current_name)).fetchall()
                 self.con1.commit()
